@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Новодністровське Радіо</title>
+  <link rel="icon" href="media/favicon.png" type="image/png">
+  <link rel="stylesheet" href="style.css">
+  <style>
+  #profile-wrapper {
+    position: fixed;
+    top: 100px;
+    right: 0;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+    /* додаємо ширину, щоб ховати блок профілю повністю за правим краєм */
+    width: 270px; 
+  }
+
+  /* Гаряча зона — прозора, щоб можна було наводити і на неї, і на профіль */
+  #profile-wrapper:hover {
+    cursor: pointer;
+  }
+
+  #hotspot {
+    width: 20px;
+    height: 100%;
+    background: #00bcd4;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+  }
+
+  /* Блок профілю — за межами екрана праворуч */
+  #profile-section {
+    width: 250px;
+    padding: 15px;
+    background: #222;
+    color: #eee;
+    border-radius: 10px 0 0 10px;
+    text-align: center;
+    font-family: sans-serif;
+    box-shadow: 0 0 10px rgba(0,0,0,0.7);
+    margin-left: 20px; /* відступ від смужки */
+    transform: translateX(250px); /* ховаємо блок праворуч */
+    transition: transform 0.3s ease;
+  }
+
+  /* При наведенні на весь wrapper блок з профілем їде вліво */
+  #profile-wrapper:hover #profile-section {
+    transform: translateX(0);
+  }
+</style>
+
+<div id="profile-wrapper">
+  <div id="profile-section">
+    <h3>Ваш профіль</h3>
+    <img id="avatarImage" src="default-avatar.png" alt="Аватар" style="width:120px;height:120px;border-radius:50%;border:3px solid #0af;object-fit:cover;cursor:pointer;">
+    <input type="file" id="avatarInput" accept="image/*" style="display:none;">
+    <br>
+    <label for="avatarInput" style="color:#0af;cursor:pointer;margin-top:10px;display:inline-block;">Обрати фото</label>
+  </div>
+  <div id="hotspot" title="Показати профіль"></div>
+</div>
+
+<script>
+  const input = document.getElementById('avatarInput');
+  const img = document.getElementById('avatarImage');
+
+  input.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      img.src = e.target.result;
+      localStorage.setItem('userAvatar', e.target.result);
+    };
+    reader.readAsDataURL(file);
+  });
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const saved = localStorage.getItem('userAvatar');
+    if (saved) img.src = saved;
+  });
+
+  img.addEventListener('click', () => input.click());
+</script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #121212;
+      color: #f0f0f0;
+    }
+
+    header {
+      position: relative;
+      color: white;
+      display: flex;
+      align-items: center;
+      padding: 20px;
+      background-image: url('media/background.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    header::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 0;
+    }
+
+    header * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .logo {
+      width: 130px;
+      height: auto;
+      margin-right: 20px;
+    }
+
+    .navbar {
+	
+	<button id="toggleTheme" style="margin-left:auto; background:#ffd700; color:#000; border:none; padding:8px 12px; border-radius:6px; cursor:pointer;">
+  🌙 Змінити тему
+</button>
+	
+      display: flex;
+      background-color: #1e1e1e;
+      padding: 10px 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      justify-content: flex-start;
+      gap: 20px;
+    }
+
+    .nav-item {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 16px;
+      padding: 8px 12px;
+      border-radius: 5px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .nav-item:hover {
+      background-color: #333;
+      color: #fff;
+    }
+
+    .nav-item.active {
+      color: #fff;
+      font-weight: bold;
+      border-bottom: 2px solid #ffd700;
+    }
+
+    main {
+      padding: 20px;
+      padding-bottom: 410px;
+    }
+
+    .radio-player {
+      background: linear-gradient(135deg, #0057b7, #ffd700);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      animation: fadeInUp 1s ease;
+      margin-bottom: 30px;
+    }
+
+    .radio-title {
+      font-size: 30px;
+      color: #fff;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 6px rgba(0,0,0,0.5);
+      position: relative;
+    }
+
+    .news {
+      background-color: #1e1e1e;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .news-title {
+      font-size: 26px;
+      color: #ffd700;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .news ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .news li {
+      background: #2c2c2c;
+      margin-bottom: 10px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 18px;
+      color: #f0f0f0;
+    }
+
+    footer {
+      background-color: #0a3d62;
+      color: white;
+      text-align: center;
+      padding: 10px;
+    }
+
+    .custom-player {
+      background: linear-gradient(135deg, #0057b7, #ffd700);
+      padding: 20px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    button.play {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: none;
+      background: white;
+      color: black;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    input[type=range] {
+      appearance: none;
+      height: 4px;
+      background: #555;
+      border-radius: 2px;
+      outline: none;
+    }
+
+    input[type=range]::-webkit-slider-thumb {
+      appearance: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    #playlist li {
+      background: #2c2c2c;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #playlist li:hover {
+      background: #3a3a3a;
+      color: #ffd700;
+    }
+
+    #randomTrack {
+      padding: 10px 20px;
+      background-color: #0057b7;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #randomTrack:hover {
+      background-color: #003d99;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="media/logo.png" alt="Логотип Радіо" class="logo">
+    <h1 style="color: #FFD700;">Новодністровське Радіо 💛💙📻</h1>
+  </header>
+  
+  <nav class="navbar">
+    <a href="#" class="nav-item active">Головна</a>
+    <a href="#" class="nav-item">Стрічка Новин</a>
+    <a href="#" class="nav-item">Бібліотека</a>
+	<div class="search-container">
+  <input type="text" id="searchQuery" placeholder="🔍 Знайти пісню...">
+  <button id="searchBtn">Пошук</button>
+</div>
+
+  </nav>
+  <button onclick="toggleTheme()">🌙☀️</button>
+
+  <main>
+  <section id="youtube-results" style="margin-top: 20px;"></section>
+
+    <section class="radio-player">
+  <h2 class="radio-title">🎶 Слухайте нас онлайн</h2>
+  <div class="custom-player">
+    <audio id="audio" src="http://91.205.207.98:8081/acc.mp3" type="audio/mpeg"></audio>
+    <div class="controls">
+      <button id="play-pause" class="play">▶️</button>
+      <span id="current">LIVE</span>
+      <input type="range" id="seek" disabled style="opacity: 0.3; cursor: not-allowed;">
+      <span id="duration">∞</span>
+    </div>
+  </div>
+</section>
+
+<script>
+  const audio = document.getElementById("audio");
+  const playPauseBtn = document.getElementById("play-pause");
+
+  playPauseBtn.addEventListener("click", () => {
+    if (audio.paused) {
+      audio.play();
+      playPauseBtn.textContent = "⏸️";
+    } else {
+      audio.pause();
+      playPauseBtn.textContent = "▶️";
+    }
+  });
+</script>
+
+
+        </div>
+		<!-- Мікшер гучності -->
+		<div style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
+  <label for="volume-control" style="color: white;">🔊</label>
+  <input type="range" id="volume-control" min="0" max="1" step="0.01" value="1" style="width: 150px;">
+
+</div>
+      </div>
+    </section>
+
+    <section class="news">
+      <h2 class="news-title">📰 Останні новини</h2>
+      <ul>
+        <li>🔊 В ефірі нова програма "Ранок на радіо!"</li>
+        <li>🎤 Загальнонаціональна хвилина мовчання!</li>
+      </ul>
+    </section>
+	
+	<section class="about-radio" style="background-color: #1e1e1e; padding: 25px; border-radius: 15px; margin-top: 30px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);">
+  <h2 style="font-size: 26px; color: #ffd700; margin-bottom: 15px;">📻 Про радіо</h2>
+  <p style="font-size: 18px; color: #f0f0f0; line-height: 1.6;">
+    Новодністровське Радіо — це незалежна платформа, яка транслює новини, музику та культурні програми для мешканців Новодністровська та Сокирянщини. Наша місія – зберігати українську ідентичність, підтримувати місцевих виконавців та бути голосом громади.
+  </p>
+</section>
+
+<section class="guestbook" style="background-color: #1e1e1e; padding: 25px; border-radius: 15px; margin-top: 30px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);">
+  <h2 style="font-size: 26px; color: #ffd700; margin-bottom: 15px;">📝 Гостьова книга</h2>
+  <form onsubmit="event.preventDefault(); alert('Дякуємо за повідомлення!');" style="display: flex; flex-direction: column; gap: 15px;">
+    <div>
+      <label for="name" style="display: block; margin-bottom: 5px; color: #ffd700;">Ім’я:</label>
+      <input type="text" id="name" name="name" required style="width: 100%; padding: 10px; border-radius: 8px; border: none; background-color: #2c2c2c; color: #fff;">
+    </div>
+    <div>
+      <label for="message" style="display: block; margin-bottom: 5px; color: #ffd700;">Повідомлення:</label>
+      <textarea id="message" name="message" rows="4" required style="width: 100%; padding: 10px; border-radius: 8px; border: none; background-color: #2c2c2c; color: #fff;"></textarea>
+    </div>
+    <button type="submit" style="align-self: flex-start; background-color: #ffd700; color: #000; padding: 10px 20px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
+      Надіслати
+    </button>
+  </form>
+</section>
+
+
+    <section id="library" style="display:none;">
+      <h2>🎵 Бібліотека пісень</h2>
+      <input type="file" id="fileInput" multiple accept="audio/*">
+      <div style="margin: 50px 0;">
+        <button id="randomTrack">🔎 Знайти українську пісню</button>
+      </div>
+      <ul id="playlist"></ul>
+      <div class="custom-player" style="margin-top: 20px;">
+        <audio id="libraryPlayer"></audio>
+		<!-- Мікшер гучності -->
+		<div style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
+  <label for="volume-control" style="color: white;">🔊</label>
+  <input type="range" id="volume-control" min="0" max="1" step="0.01" value="1" style="width: 150px;">
+</div>
+
+		
+        <div class="controls">
+          <button id="library-play-pause" class="play">▶️</button>
+          <span id="library-current">0:00</span>
+          <input type="range" id="library-seek" value="0" max="100">
+          <span id="library-duration">0:00</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 Новодністровське Радіо | Зв’язок: radio@nvs.com.ua</p>
+  </footer>
+
+  <script>
+    const audio = document.getElementById('audio');
+    const playBtn = document.getElementById('play-pause');
+    const seekBar = document.getElementById('seek');
+    const current = document.getElementById('current');
+    const duration = document.getElementById('duration');
+
+    function formatTime(t) {
+      const min = Math.floor(t / 60);
+      const sec = Math.floor(t % 60).toString().padStart(2, '0');
+      return `${min}:${sec}`;
+    }
+
+    audio.onloadedmetadata = () => {
+      seekBar.max = audio.duration;
+      duration.textContent = formatTime(audio.duration);
+    };
+
+    audio.ontimeupdate = () => {
+      seekBar.value = audio.currentTime;
+      current.textContent = formatTime(audio.currentTime);
+    };
+
+    seekBar.oninput = () => {
+      audio.currentTime = seekBar.value;
+    };
+
+    playBtn.onclick = () => {
+      if (audio.paused) {
+        audio.play();
+        playBtn.textContent = '⏸️';
+      } else {
+        audio.pause();
+        playBtn.textContent = '▶️';
+      }
+    };
+
+    // Бібліотека
+    const librarySection = document.getElementById('library');
+    const navItems = document.querySelectorAll('.nav-item');
+    const fileInput = document.getElementById('fileInput');
+    const playlist = document.getElementById('playlist');
+    const libraryPlayer = document.getElementById('libraryPlayer');
+    const libPlayBtn = document.getElementById('library-play-pause');
+    const libSeekBar = document.getElementById('library-seek');
+    const libCurrent = document.getElementById('library-current');
+    const libDuration = document.getElementById('library-duration');
+    const randomTrackBtn = document.getElementById('randomTrack');
+
+    navItems.forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        navItems.forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+
+        if (item.textContent === 'Бібліотека') {
+          document.querySelector('.radio-player').style.display = 'none';
+          document.querySelector('.news').style.display = 'none';
+          librarySection.style.display = 'block';
+        } else {
+          document.querySelector('.radio-player').style.display = 'block';
+          document.querySelector('.news').style.display = 'block';
+          librarySection.style.display = 'none';
+        }
+      });
+    });
+
+    let currentTrack = null;
+    let tracks = [];
+
+    fileInput.addEventListener('change', () => {
+      playlist.innerHTML = '';
+      tracks = Array.from(fileInput.files);
+      tracks.forEach((file, index) => {
+        const li = document.createElement('li');
+        li.textContent = file.name;
+        li.addEventListener('click', () => playTrack(index));
+        playlist.appendChild(li);
+      });
+    });
+
+    function playTrack(index) {
+      currentTrack = index;
+      const file = tracks[index];
+      const url = URL.createObjectURL(file);
+      libraryPlayer.src = url;
+      libraryPlayer.play();
+      libPlayBtn.textContent = '⏸️';
+    }
+
+    libPlayBtn.onclick = () => {
+      if (libraryPlayer.paused) {
+        libraryPlayer.play();
+        libPlayBtn.textContent = '⏸️';
+      } else {
+        libraryPlayer.pause();
+        libPlayBtn.textContent = '▶️';
+      }
+    };
+
+    libraryPlayer.ontimeupdate = () => {
+      libSeekBar.value = libraryPlayer.currentTime;
+      libCurrent.textContent = formatTime(libraryPlayer.currentTime);
+    };
+
+    libSeekBar.oninput = () => {
+      libraryPlayer.currentTime = libSeekBar.value;
+    };
+
+    libraryPlayer.onloadedmetadata = () => {
+      libSeekBar.max = libraryPlayer.duration;
+      libDuration.textContent = formatTime(libraryPlayer.duration);
+    };
+
+    const ukrainianTracks = [
+      {
+        name: "Go_A – Шум",
+        url: "https://cdn.example.com/goa-shum.mp3"
+      },
+      {
+        name: "Океан Ельзи – Обійми",
+        url: "https://cdn.example.com/okean-objimy.mp3"
+      },
+      {
+        name: "Антитіла – Бери своє",
+        url: "https://cdn.example.com/antytila-beri.mp3"
+      },
+      {
+        name: "Kalush – Stefania",
+        url: "https://cdn.example.com/kalush-stefania.mp3"
+      }
+    ];
+
+    randomTrackBtn.addEventListener('click', () => {
+      const random = ukrainianTracks[Math.floor(Math.random() * ukrainianTracks.length)];
+      libraryPlayer.src = random.url;
+      libraryPlayer.play();
+      libPlayBtn.textContent = '⏸️';
+
+      const li = document.createElement('li');
+      li.textContent = random.name + " (онлайн)";
+      li.style.color = '#ffd700';
+      playlist.appendChild(li);
+    });
+  </script>
+  
+  <!-- HTML-контент до цього моменту -->
+
+<script>
+// Список пісень для демонстрації
+const songs = [
+    { id: 1, title: "Червона рута", artist: "Софія Ротару" },
+    { id: 2, title: "Стефанія", artist: "Kalush Orchestra" },
+    { id: 3, title: "Ой у лузі червона калина", artist: "Бумбокс" },
+    { id: 4, title: "Плакала", artist: "KAZKA" },
+    { id: 5, title: "Тримай", artist: "Океан Ельзи" }
+];
+
+let currentSong = null;
+let repeat = false;
+let favorites = [];
+
+function searchSongs() {
+    const searchTerm = document.getElementById('search').value.toLowerCase();
+    const filteredSongs = songs.filter(song =>
+        song.title.toLowerCase().includes(searchTerm) ||
+        song.artist.toLowerCase().includes(searchTerm)
+    );
+    displaySongs(filteredSongs);
+}
+
+function displaySongs(songsToDisplay) {
+    const songList = document.getElementById('song-list');
+    songList.innerHTML = '';
+    songsToDisplay.forEach(song => {
+        const songItem = document.createElement('div');
+        songItem.className = 'song-item';
+        songItem.innerHTML = `
+            <span>${song.title} - ${song.artist}</span>
+            <button onclick="playSong(${song.id})">▶️</button>
+        `;
+        songList.appendChild(songItem);
+    });
+}
+
+function playSong(songId) {
+    currentSong = songs.find(song => song.id === songId);
+    const titleElem = document.getElementById('current-title');
+    const artistElem = document.getElementById('current-artist');
+    titleElem.textContent = `Зараз грає: ${currentSong.title}`;
+    artistElem.textContent = currentSong.artist;
+    document.getElementById('current-song').style.display = 'block';
+}
+
+function playRandomSong() {
+    const randomSong = songs[Math.floor(Math.random() * songs.length)];
+    playSong(randomSong.id);
+}
+
+function toggleRepeat() {
+    repeat = !repeat;
+    alert(repeat ? "Повторення увімкнено" : "Повторення вимкнено");
+}
+
+function addToFavorites() {
+    if (!currentSong) return;
+    if (!favorites.includes(currentSong.id)) {
+        favorites.push(currentSong.id);
+        const favoritesList = document.getElementById('favorites-list');
+        const favoriteItem = document.createElement('li');
+        favoriteItem.textContent = `${currentSong.title} - ${currentSong.artist}`;
+        favoritesList.appendChild(favoriteItem);
+        alert(`Пісня "${currentSong.title}" додана в улюблені!`);
+    } else {
+        alert("Ця пісня вже в улюблених!");
+    }
+}
+</script>
+
+<script>
+  const apiKey = "AIzaSyApMxPU7YSc1ZWQVLP6gzWRo8qaxs4CrAU";
+
+  document.getElementById("searchBtn").addEventListener("click", function () {
+    const query = document.getElementById("searchQuery").value.trim();
+    if (query) {
+      searchYouTube(query);
+    }
+  });
+
+  function searchYouTube(query) {
+    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=5&q=${encodeURIComponent(query)}&key=${apiKey}`;
+
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        displayResults(data.items);
+      })
+      .catch(error => {
+        console.error("Помилка при пошуку:", error);
+      });
+  }
+
+  function displayResults(videos) {
+    const resultsContainer = document.getElementById("youtube-results");
+    resultsContainer.innerHTML = "";
+
+    if (!videos.length) {
+      resultsContainer.innerHTML = "<p>Нічого не знайдено 😞</p>";
+      return;
+    }
+
+    videos.forEach(video => {
+      const videoId = video.id.videoId;
+      const title = video.snippet.title;
+      const thumbnail = video.snippet.thumbnails.medium.url;
+
+      const videoEl = document.createElement("div");
+      videoEl.style.marginBottom = "20px";
+      videoEl.innerHTML = `
+        <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank" style="text-decoration: none; color: #ffd700;">
+          <img src="${thumbnail}" alt="${title}" style="width: 100%; max-width: 400px; border-radius: 10px; display: block; margin-bottom: 5px;">
+          <strong>${title}</strong>
+        </a>
+      `;
+      resultsContainer.appendChild(videoEl);
+    });
+  }
+</script>
+
+<script src="script.js"></script>
+
+<script>
+  const player = document.getElementById('audio');
+
+  // Масив усіх треків (включаючи перший)
+  const tracks = [
+    'media/audio.mp3',
+    'media/audio1.mp3',
+    'media/audio2.mp3',
+    'media/audio3.mp3',
+    'media/audio4.mp3'
+  ];
+
+  // Видаляємо перший трек, бо він уже програється
+  let remainingTracks = tracks.filter(track => track !== player.src);
+
+  // Нормалізуємо шлях, якщо треба
+  function getFileName(path) {
+    return path.split('/').pop();
+  }
+
+  // Після завершення — випадково вибираємо наступний
+  player.addEventListener('ended', () => {
+    if (remainingTracks.length === 0) {
+      // Якщо все програли — відновлюємо список
+      remainingTracks = [...tracks];
+    }
+
+    // Вибираємо випадковий трек
+    const index = Math.floor(Math.random() * remainingTracks.length);
+    const nextTrack = remainingTracks.splice(index, 1)[0];
+
+    // Встановлюємо новий трек
+    player.src = nextTrack;
+    player.play();
+  });
+</script>
+
+<script>
+  function toggleTheme() {
+    document.body.classList.toggle("light-theme");
+  }
+</script>
+
+<script>
+  const toggleBtn = document.getElementById('toggleTheme');
+  toggleBtn.addEventListener('click', () => {
+    document.body.classList.toggle('light-theme');
+    toggleBtn.textContent = document.body.classList.contains('light-theme') ? '🌙 Темна тема' : '🌞 Світла тема';
+  });
+</script>
+
+</body>
+</html>
+
+  
+</body>
+</html>
+
